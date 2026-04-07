@@ -1,1041 +1,133 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COMPASS — Functional Outcomes</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg:        #080c14;
-            --surface:   #0e1420;
-            --card:      #131b2e;
-            --card-hi:   #192238;
-            --border:    rgba(255,255,255,0.07);
-            --border-hi: rgba(255,255,255,0.13);
-
-            --teal:      #00c9a7;
-            --teal-dim:  rgba(0,201,167,0.12);
-            --teal-glow: 0 0 24px rgba(0,201,167,0.25);
-            --blue:      #4f9eff;
-            --blue-dim:  rgba(79,158,255,0.12);
-            --violet:    #a78bfa;
-            --violet-dim:rgba(167,139,250,0.12);
-            --amber:     #fbbf24;
-            --red:       #f87171;
-            --green:     #4ade80;
-
-            --text-1:    #f0f4ff;
-            --text-2:    #8893a8;
-            --text-3:    #4a5568;
-
-            --font-display: 'Syne', sans-serif;
-            --font-data:    'JetBrains Mono', monospace;
-            --font-body:    'DM Sans', sans-serif;
-
-            --radius:    10px;
-            --radius-lg: 16px;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: var(--font-body);
-            background: var(--bg);
-            color: var(--text-1);
-            min-height: 100vh;
-            /* Subtle dot grid */
-            background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
-            background-size: 28px 28px;
-        }
-
-        /* ── HEADER ─────────────────────────────── */
-        .header {
-            background: linear-gradient(180deg, rgba(0,201,167,0.06) 0%, transparent 100%);
-            border-bottom: 1px solid var(--border);
-            padding: 22px 36px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(16px);
-        }
-        .header-left { display: flex; align-items: center; gap: 18px; }
-        .logo {
-            font-family: var(--font-display);
-            font-size: 2em;
-            font-weight: 800;
-            letter-spacing: 3px;
-            color: var(--teal);
-            text-shadow: 0 0 30px rgba(0,201,167,0.4);
-        }
-        .logo-divider {
-            width: 1px;
-            height: 32px;
-            background: var(--border-hi);
-        }
-        .logo-sub {
-            font-family: var(--font-body);
-            font-size: 0.72em;
-            color: var(--text-2);
-            font-weight: 400;
-            line-height: 1.4;
-            max-width: 340px;
-        }
-        .ms-badge {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            background: var(--card);
-            border: 1px solid var(--border-hi);
-            border-radius: 40px;
-            padding: 7px 14px;
-            font-size: 0.7em;
-            color: var(--text-2);
-            font-weight: 500;
-        }
-        .ms-dot {
-            width: 8px; height: 8px;
-            background: var(--teal);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--teal);
-            animation: pulse 2.5s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%,100% { opacity: 1; transform: scale(1); }
-            50%      { opacity: 0.5; transform: scale(0.85); }
-        }
-
-        /* ── LAYOUT ─────────────────────────────── */
-        .main {
-            display: grid;
-            grid-template-columns: 310px 1fr;
-            gap: 0;
-            min-height: calc(100vh - 73px);
-        }
-
-        /* ── LEFT PANEL ─────────────────────────── */
-        .left-panel {
-            border-right: 1px solid var(--border);
-            padding: 28px 22px;
-            overflow-y: auto;
-            background: var(--surface);
-        }
-        .section-title {
-            font-family: var(--font-display);
-            font-size: 0.62em;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--teal);
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .section-title::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        /* NS Grade Selector */
-        .ns-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 28px;
-        }
-        .ns-side-label {
-            font-size: 0.65em;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: var(--text-2);
-            text-transform: uppercase;
-            margin-bottom: 6px;
-        }
-        .ns-btn-stack { display: flex; flex-direction: column; gap: 5px; }
-        .ns-btn {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 9px 11px;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.2s;
-            color: var(--text-2);
-        }
-        .ns-btn:hover { border-color: var(--border-hi); background: var(--card-hi); color: var(--text-1); }
-        .ns-btn-grade { font-family: var(--font-display); font-size: 0.82em; font-weight: 700; }
-        .ns-btn-desc  { font-size: 0.62em; margin-top: 1px; opacity: 0.7; }
-
-        .ns-btn.active.g1 { border-color: var(--green); background: rgba(74,222,128,0.08); color: var(--green); box-shadow: 0 0 16px rgba(74,222,128,0.12); }
-        .ns-btn.active.g2 { border-color: var(--amber); background: rgba(251,191,36,0.08);  color: var(--amber); box-shadow: 0 0 16px rgba(251,191,36,0.12); }
-        .ns-btn.active.g3 { border-color: var(--red);   background: rgba(248,113,113,0.08); color: var(--red);   box-shadow: 0 0 16px rgba(248,113,113,0.12); }
-
-        /* Input controls */
-        .input-block { margin-bottom: 14px; }
-        .input-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
-            font-size: 0.72em;
-            color: var(--text-2);
-            font-weight: 500;
-        }
-        .input-val {
-            font-family: var(--font-data);
-            font-size: 0.78em;
-            font-weight: 600;
-            color: var(--teal);
-        }
-
-        input[type="range"] {
-            width: 100%;
-            -webkit-appearance: none;
-            height: 3px;
-            border-radius: 2px;
-            background: var(--border-hi);
-            outline: none;
-            cursor: pointer;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 14px; height: 14px;
-            border-radius: 50%;
-            background: var(--teal);
-            box-shadow: 0 0 10px rgba(0,201,167,0.5);
-            cursor: pointer;
-            transition: transform 0.15s;
-        }
-        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
-
-        .seg-row { display: flex; gap: 3px; margin-top: 2px; }
-        .seg-btn {
-            flex: 1;
-            padding: 6px 3px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text-2);
-            font-family: var(--font-body);
-            font-size: 0.67em;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.18s;
-            text-align: center;
-        }
-        .seg-btn:hover { border-color: var(--border-hi); color: var(--text-1); }
-        .seg-btn.on {
-            background: var(--teal-dim);
-            border-color: var(--teal);
-            color: var(--teal);
-            font-weight: 600;
-        }
-        .com-row { display: flex; gap: 4px; }
-        .com-btn {
-            flex: 1;
-            padding: 7px 4px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text-2);
-            font-size: 0.64em;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.18s;
-            text-align: center;
-        }
-        .com-btn.on { background: rgba(248,113,113,0.1); border-color: var(--red); color: var(--red); }
-
-        .sep {
-            border: none;
-            border-top: 1px solid var(--border);
-            margin: 20px 0;
-        }
-
-        .shim-warn {
-            background: rgba(251,191,36,0.08);
-            border: 1px solid rgba(251,191,36,0.25);
-            border-radius: 8px;
-            padding: 8px 11px;
-            font-size: 0.67em;
-            color: var(--amber);
-            margin-top: 8px;
-            display: none;
-        }
-        .shim-warn.show { display: block; }
-
-        /* ── RIGHT PANEL ────────────────────────── */
-        .right-panel {
-            padding: 28px 32px;
-            overflow-y: auto;
-        }
-
-        /* NS chips at top */
-        .ns-chips { display: flex; gap: 10px; margin-bottom: 24px; }
-        .ns-chip {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-size: 0.72em;
-            font-weight: 600;
-            border: 1px solid var(--border);
-            background: var(--card);
-            color: var(--text-2);
-            transition: all 0.3s;
-        }
-        .ns-chip-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-3); }
-        .ns-chip.g1 { border-color: rgba(74,222,128,0.35); background: rgba(74,222,128,0.06); color: var(--green); }
-        .ns-chip.g1 .ns-chip-dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
-        .ns-chip.g2 { border-color: rgba(251,191,36,0.35);  background: rgba(251,191,36,0.06);  color: var(--amber); }
-        .ns-chip.g2 .ns-chip-dot { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
-        .ns-chip.g3 { border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.06); color: var(--red); }
-        .ns-chip.g3 .ns-chip-dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
-
-        /* Hero stats */
-        .hero-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 24px;
-        }
-        .hero-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 22px 24px;
-            position: relative;
-            overflow: hidden;
-            transition: border-color 0.3s;
-        }
-        .hero-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--blue), transparent);
-        }
-        .hero-card.cont::before { background: linear-gradient(90deg, var(--violet), transparent); }
-        .hero-card:hover { border-color: var(--border-hi); }
-
-        .hero-label {
-            font-size: 0.65em;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--text-2);
-            margin-bottom: 10px;
-        }
-        .hero-number {
-            font-family: var(--font-data);
-            font-size: 3.6em;
-            font-weight: 700;
-            color: var(--blue);
-            line-height: 1;
-            letter-spacing: -1px;
-            transition: all 0.4s;
-        }
-        .hero-card.cont .hero-number { color: var(--violet); }
-        .hero-sub {
-            font-size: 0.7em;
-            color: var(--text-2);
-            margin-top: 6px;
-        }
-        .hero-delta {
-            position: absolute;
-            top: 22px; right: 22px;
-            font-family: var(--font-data);
-            font-size: 0.72em;
-            font-weight: 600;
-            padding: 3px 9px;
-            border-radius: 20px;
-        }
-        .hero-delta.pos { background: rgba(74,222,128,0.12); color: var(--green); }
-        .hero-delta.neg { background: rgba(248,113,113,0.12); color: var(--red); }
-        .hero-delta.neu { background: var(--card-hi); color: var(--text-2); }
-
-        /* Timeline */
-        .timeline-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 24px;
-        }
-        .timeline-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 18px 20px;
-        }
-        .timeline-card-title {
-            font-size: 0.67em;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-2);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
-        .timeline-card-title span {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-        .timeline-card-title.pot-color span { background: var(--blue); box-shadow: 0 0 6px var(--blue); }
-        .timeline-card-title.cont-color span { background: var(--violet); box-shadow: 0 0 6px var(--violet); }
-
-        .tl-points {
-            display: flex;
-            align-items: flex-end;
-            gap: 6px;
-            height: 68px;
-            margin-bottom: 8px;
-        }
-        .tl-col {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            height: 100%;
-            justify-content: flex-end;
-        }
-        .tl-bar-wrap {
-            flex: 1;
-            width: 100%;
-            display: flex;
-            align-items: flex-end;
-        }
-        .tl-bar {
-            width: 100%;
-            border-radius: 3px 3px 0 0;
-            background: var(--blue-dim);
-            border-top: 2px solid var(--blue);
-            transition: height 0.5s cubic-bezier(0.34,1.56,0.64,1);
-            min-height: 4px;
-        }
-        .cont-bar { background: var(--violet-dim); border-top-color: var(--violet); }
-        .tl-val {
-            font-family: var(--font-data);
-            font-size: 0.65em;
-            font-weight: 600;
-            color: var(--blue);
-        }
-        .cont-val { color: var(--violet); }
-        .tl-label {
-            font-size: 0.55em;
-            color: var(--text-3);
-        }
-
-        /* Modifiable factors */
-        .mod-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-        .mod-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 12px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .mod-name { font-size: 0.7em; color: var(--text-2); font-weight: 500; }
-        .mod-val {
-            font-family: var(--font-data);
-            font-size: 0.68em;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 20px;
-        }
-        .mod-val.pos { background: rgba(74,222,128,0.1);  color: var(--green); }
-        .mod-val.neg { background: rgba(248,113,113,0.1); color: var(--red); }
-        .mod-val.neu { background: var(--card-hi); color: var(--text-2); }
-
-        .net-row {
-            background: var(--card);
-            border: 1px solid var(--border-hi);
-            border-radius: var(--radius);
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            font-size: 0.72em;
-        }
-        .net-row-label { color: var(--text-2); font-weight: 500; }
-        .net-vals { display: flex; gap: 20px; }
-        .net-item { display: flex; align-items: center; gap: 6px; }
-        .net-dot { width: 6px; height: 6px; border-radius: 50%; }
-        .net-item.pot .net-dot { background: var(--blue); }
-        .net-item.cont .net-dot { background: var(--violet); }
-        .net-item span {
-            font-family: var(--font-data);
-            font-size: 0.9em;
-            font-weight: 600;
-        }
-        .net-item.pot span { color: var(--blue); }
-        .net-item.cont span { color: var(--violet); }
-
-        /* Disclaimer */
-        .disclaimer {
-            border: 1px solid rgba(251,191,36,0.15);
-            border-left: 3px solid var(--amber);
-            background: rgba(251,191,36,0.04);
-            border-radius: var(--radius);
-            padding: 12px 16px;
-            font-size: 0.67em;
-            color: var(--text-2);
-            line-height: 1.6;
-        }
-        .disclaimer strong { color: var(--amber); }
-
-        /* Tooltip */
-        .tip {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 13px; height: 13px;
-            background: var(--card-hi);
-            border: 1px solid var(--border-hi);
-            border-radius: 50%;
-            font-size: 0.55em;
-            color: var(--text-2);
-            cursor: help;
-            position: relative;
-            margin-left: 3px;
-            vertical-align: middle;
-        }
-        .tip:hover::after {
-            content: attr(data-tip);
-            position: absolute;
-            left: 110%;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #1e293b;
-            border: 1px solid var(--border-hi);
-            color: var(--text-1);
-            padding: 7px 11px;
-            border-radius: 8px;
-            font-size: 11px;
-            white-space: nowrap;
-            z-index: 999;
-            max-width: 200px;
-            white-space: normal;
-            width: max-content;
-            max-width: 180px;
-        }
-
-        /* Animate number changes */
-        .flash { animation: numFlash 0.35s ease; }
-        @keyframes numFlash {
-            0%   { opacity: 0.4; transform: translateY(4px); }
-            100% { opacity: 1;   transform: translateY(0); }
-        }
-
-        @media (max-width: 960px) {
-            .main { grid-template-columns: 1fr; }
-            .hero-row, .timeline-section, .mod-grid { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-<body>
-
-<!-- HEADER -->
-<header class="header">
-    <div class="header-left">
-        <div class="logo">COMPASS</div>
-        <div class="logo-divider"></div>
-        <div class="logo-sub">Functional Outcomes Module<br>Post-Radical Prostatectomy Recovery Prediction</div>
-    </div>
-    <div class="ms-badge">
-        <div class="ms-dot"></div>
-        Icahn School of Medicine at Mount Sinai · Tewari Lab
-    </div>
-</header>
-
-<div class="main">
-
-    <!-- LEFT PANEL: INPUTS -->
-    <div class="left-panel">
-
-        <!-- NS Grade -->
-        <div class="section-title">Nerve-Sparing Grade</div>
-        <div class="ns-grid">
-            <div>
-                <div class="ns-side-label">Left Side</div>
-                <div class="ns-btn-stack" id="ns_left">
-                    <button class="ns-btn g1 active" data-grade="1" onclick="setNS('left',1)">
-                        <div class="ns-btn-grade">Grade 1</div>
-                        <div class="ns-btn-desc">Intrafascial</div>
-                    </button>
-                    <button class="ns-btn g2" data-grade="2" onclick="setNS('left',2)">
-                        <div class="ns-btn-grade">Grade 2</div>
-                        <div class="ns-btn-desc">Interfascial</div>
-                    </button>
-                    <button class="ns-btn g3" data-grade="3" onclick="setNS('left',3)">
-                        <div class="ns-btn-grade">Grade 3</div>
-                        <div class="ns-btn-desc">Wide excision</div>
-                    </button>
-                </div>
-            </div>
-            <div>
-                <div class="ns-side-label">Right Side</div>
-                <div class="ns-btn-stack" id="ns_right">
-                    <button class="ns-btn g1 active" data-grade="1" onclick="setNS('right',1)">
-                        <div class="ns-btn-grade">Grade 1</div>
-                        <div class="ns-btn-desc">Intrafascial</div>
-                    </button>
-                    <button class="ns-btn g2" data-grade="2" onclick="setNS('right',2)">
-                        <div class="ns-btn-grade">Grade 2</div>
-                        <div class="ns-btn-desc">Interfascial</div>
-                    </button>
-                    <button class="ns-btn g3" data-grade="3" onclick="setNS('right',3)">
-                        <div class="ns-btn-grade">Grade 3</div>
-                        <div class="ns-btn-desc">Wide excision</div>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <hr class="sep">
-
-        <!-- Patient Factors -->
-        <div class="section-title">Patient Factors</div>
-
-        <div class="input-block">
-            <div class="input-label">
-                <span>Age <span class="tip" data-tip="Potency recovery declines gradually with age. Modeled as a continuous adjustment.">?</span></span>
-                <span class="input-val" id="v_age">64 yrs</span>
-            </div>
-            <input type="range" id="inp_age" min="40" max="85" value="64" oninput="setSlider('age','yrs')">
-        </div>
-
-        <div class="input-block">
-            <div class="input-label">
-                <span>Baseline SHIM <span class="tip" data-tip="Erectile function score (1–25). Potency prediction requires SHIM ≥12. Higher = better baseline.">?</span></span>
-                <span class="input-val" id="v_shim">21</span>
-            </div>
-            <input type="range" id="inp_shim" min="1" max="25" value="21" oninput="setSlider('shim','')">
-            <div class="shim-warn" id="shim_warn">⚠ SHIM &lt;12 — potency prediction unavailable</div>
-        </div>
-
-        <div class="input-block">
-            <div class="input-label">
-                <span>Baseline IPSS <span class="tip" data-tip="Urinary symptom score (0–35). Higher = worse baseline, predicts delayed continence recovery.">?</span></span>
-                <span class="input-val" id="v_ipss">8</span>
-            </div>
-            <input type="range" id="inp_ipss" min="0" max="35" value="8" oninput="setSlider('ipss','')">
-        </div>
-
-        <hr class="sep">
-
-        <!-- Modifiable Factors -->
-        <div class="section-title">Modifiable Factors</div>
-
-        <div class="input-block">
-            <div class="input-label">
-                <span>BMI</span>
-                <span class="input-val" id="v_bmi">27.0</span>
-            </div>
-            <input type="range" id="inp_bmi" min="18" max="45" step="0.5" value="27" oninput="setSlider('bmi','')">
-        </div>
-
-        <div class="input-block">
-            <div class="input-label"><span>Pelvic Floor Training (PFMT)</span></div>
-            <div class="seg-row" id="grp_pfmt">
-                <button class="seg-btn" data-v="none">None</button>
-                <button class="seg-btn on" data-v="basic">Basic</button>
-                <button class="seg-btn" data-v="moderate">Mod</button>
-                <button class="seg-btn" data-v="intensive">Intensive</button>
-            </div>
-        </div>
-
-        <div class="input-block">
-            <div class="input-label"><span>Exercise Level</span></div>
-            <div class="seg-row" id="grp_exercise">
-                <button class="seg-btn" data-v="sedentary">Sedentary</button>
-                <button class="seg-btn" data-v="light">Light</button>
-                <button class="seg-btn on" data-v="moderate">Mod</button>
-                <button class="seg-btn" data-v="active">Active</button>
-            </div>
-        </div>
-
-        <div class="input-block">
-            <div class="input-label"><span>Smoking Status</span></div>
-            <div class="seg-row" id="grp_smoking">
-                <button class="seg-btn on" data-v="never">Never</button>
-                <button class="seg-btn" data-v="former">Former</button>
-                <button class="seg-btn" data-v="current">Current</button>
-            </div>
-        </div>
-
-        <div class="input-block">
-            <div class="input-label"><span>PDE5 Inhibitor Plan <span class="tip" data-tip="Daily low-dose promotes nerve healing and is most effective for potency recovery.">?</span></span></div>
-            <div class="seg-row" id="grp_pde5">
-                <button class="seg-btn" data-v="none">None</button>
-                <button class="seg-btn on" data-v="prn">PRN</button>
-                <button class="seg-btn" data-v="daily">Daily</button>
-            </div>
-        </div>
-
-        <div class="input-block">
-            <div class="input-label"><span>Alcohol Usage</span></div>
-            <div class="seg-row" id="grp_alcohol">
-                <button class="seg-btn" data-v="none">None</button>
-                <button class="seg-btn on" data-v="moderate">Moderate</button>
-                <button class="seg-btn" data-v="heavy">Heavy</button>
-            </div>
-        </div>
-
-        <div class="input-block">
-            <div class="input-label"><span>Comorbidities</span></div>
-            <div class="com-row">
-                <button class="com-btn" id="btn_dm"  onclick="toggleCom('dm')">Diabetes</button>
-                <button class="com-btn" id="btn_htn" onclick="toggleCom('htn')">HTN</button>
-                <button class="com-btn" id="btn_cad" onclick="toggleCom('cad')">CAD</button>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- RIGHT PANEL: RESULTS -->
-    <div class="right-panel">
-
-        <!-- NS chips -->
-        <div class="ns-chips">
-            <div class="ns-chip g1" id="chip_left"><div class="ns-chip-dot"></div>Left: Grade 1 — Intrafascial</div>
-            <div class="ns-chip g1" id="chip_right"><div class="ns-chip-dot"></div>Right: Grade 1 — Intrafascial</div>
-        </div>
-
-        <!-- Hero numbers -->
-        <div class="hero-row">
-            <div class="hero-card">
-                <div class="hero-label">⚡ Potency Recovery — 12 months</div>
-                <div class="hero-number" id="pot_hero">—</div>
-                <div class="hero-sub">of patients with similar profile achieve SHIM ≥12</div>
-                <div class="hero-delta neu" id="pot_delta_badge">—</div>
-            </div>
-            <div class="hero-card cont">
-                <div class="hero-label">💧 Continence Recovery — 12 months</div>
-                <div class="hero-number" id="cont_hero">—</div>
-                <div class="hero-sub">achieve 0–1 pad usage at 12 months</div>
-                <div class="hero-delta neu" id="cont_delta_badge">—</div>
-            </div>
-        </div>
-
-        <!-- Recovery timelines -->
-        <div class="timeline-section">
-            <div class="timeline-card">
-                <div class="timeline-card-title pot-color"><span></span>Potency Recovery Trajectory</div>
-                <div class="tl-points" id="tl_pot">
-                    <div class="tl-col"><div class="tl-bar-wrap"><div class="tl-bar" style="height:40%"></div></div><div class="tl-val" id="pt_6w">—</div><div class="tl-label">6wk</div></div>
-                    <div class="tl-col"><div class="tl-bar-wrap"><div class="tl-bar" style="height:55%"></div></div><div class="tl-val" id="pt_3m">—</div><div class="tl-label">3mo</div></div>
-                    <div class="tl-col"><div class="tl-bar-wrap"><div class="tl-bar" style="height:72%"></div></div><div class="tl-val" id="pt_6m">—</div><div class="tl-label">6mo</div></div>
-                    <div class="tl-col"><div class="tl-bar-wrap"><div class="tl-bar" style="height:82%"></div></div><div class="tl-val" id="pt_12m">—</div><div class="tl-label">12mo</div></div>
-                    <div class="tl-col"><div class="tl-bar-wrap"><div class="tl-bar" style="height:90%"></div></div><div class="tl-val" id="pt_18m">—</div><div class="tl-label">18mo</div></div>
-                </div>
-            </div>
-            <div class="timeline-card">
-                <div class="timeline-card-title cont-color"><span></span>Continence Recovery Trajectory</div>
-                <div class="tl-points" id="tl_cont">
-                    <div class="tl-col"><div class="tl-bar-wrap"><div class="tl-bar cont-bar" style="height:52%"></div></div><div class="tl-val cont-val" id="ct_6w">—</div><div class="tl-label">6wk</div></div>
-                    <div class="tl-col"><div class="tl-bar-wrap"><div class="tl-bar cont-bar" style="height:70%"></div></div><div class="tl-val cont-val" id="ct_3m">—</div><div class="tl-label">3mo</div></div>
-                    <div class="tl-col"><div class="tl-bar-wrap"><div class="tl-bar cont-bar" style="height:84%"></div></div><div class="tl-val cont-val" id="ct_6m">—</div><div class="tl-label">6mo</div></div>
-                    <div class="tl-col"><div class="tl-bar-wrap"><div class="tl-bar cont-bar" style="height:92%"></div></div><div class="tl-val cont-val" id="ct_12m">—</div><div class="tl-label">12mo</div></div>
-                    <div class="tl-col"><div class="tl-bar-wrap"><div class="tl-bar cont-bar" style="height:96%"></div></div><div class="tl-val cont-val" id="ct_18m">—</div><div class="tl-label">18mo</div></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modifiable factor cards -->
-        <div class="section-title" style="margin-bottom:12px;">Modifiable Factor Adjustments</div>
-        <div class="mod-grid">
-            <div class="mod-card"><span class="mod-name">BMI (<span id="bmi_val">27.0</span>)</span><span class="mod-val neu" id="m_bmi">—</span></div>
-            <div class="mod-card"><span class="mod-name">Pelvic Floor Training</span><span class="mod-val neu" id="m_pfmt">—</span></div>
-            <div class="mod-card"><span class="mod-name">Exercise Level</span><span class="mod-val neu" id="m_exercise">—</span></div>
-            <div class="mod-card"><span class="mod-name">PDE5 Inhibitors</span><span class="mod-val neu" id="m_pde5">—</span></div>
-            <div class="mod-card"><span class="mod-name">Smoking Status</span><span class="mod-val neu" id="m_smoking">—</span></div>
-            <div class="mod-card"><span class="mod-name">Alcohol Usage</span><span class="mod-val neu" id="m_alcohol">—</span></div>
-            <div class="mod-card"><span class="mod-name">Comorbidities</span><span class="mod-val neu" id="m_comorbid">—</span></div>
-        </div>
-
-        <!-- Net adjustment -->
-        <div class="net-row">
-            <span class="net-row-label">Net lifestyle adjustment</span>
-            <div class="net-vals">
-                <div class="net-item pot"><div class="net-dot"></div><span id="net_pot">±0%</span><span style="font-size:0.65em;color:var(--text-2);margin-left:3px;">potency</span></div>
-                <div class="net-item cont"><div class="net-dot"></div><span id="net_cont">±0%</span><span style="font-size:0.65em;color:var(--text-2);margin-left:3px;">continence</span></div>
-            </div>
-        </div>
-
-        <!-- Disclaimer -->
-        <div class="disclaimer">
-            <strong>Research use only.</strong> COMPASS uses a literature-calibrated framework with coefficients derived from published studies.
-            Predictions require institutional calibration using the Mount Sinai cohort for clinical implementation and do not replace clinical judgment.
-            AUC ranges: Potency 0.76–0.81 | Continence 0.72–0.78 (internal validation).
-            · Icahn School of Medicine at Mount Sinai · Department of Urology · Tewari Lab
-        </div>
-
-    </div>
-</div>
-
-<script>
-// ── STATE ──────────────────────────────────────────
-var S = {
-    nsL:1, nsR:1,
-    age:64, shim:21, ipss:8, bmi:27,
-    pfmt:'basic', exercise:'moderate', smoking:'never',
-    pde5:'prn', alcohol:'moderate',
-    dm:false, htn:false, cad:false
-};
-
-// ── COHORT DATA ────────────────────────────────────
-// Indices: [6wk, 3mo, 6mo, 12mo(ref), 12mo(main), 18mo, 24mo]
-var POT = {
-    BL_G1:       [45,62,87,87,90,94,98],
-    UL_G1_CL_G2: [35,56,81,81,86,92,95],
-    BL_G2:       [26,47,69,72,77,86,87],
-    G3_PLUS:     [18,32,48,55,62,70,75],
-    VERY_HIGH:   [10,20,32,38,45,52,58]
-};
-var CONT = {
-    BL_G1:       [60,77,92,95,96,96,98],
-    UL_G1_CL_G2: [57,79,92,94,96,97,98],
-    BL_G2:       [47,76,92,92,93,95,95],
-    G3_PLUS:     [49,72,87,91,93,95,95],
-    VERY_HIGH:   [40,62,78,84,88,91,93]
-};
-
-// ── MOD FACTORS ────────────────────────────────────
-var MF = {
-    bmi:{
-        pot:  function(b){return b<25?0:b<30?-3:-8;},
-        cont: function(b){return b<25?0:b<30?-2:-5;},
-        range:function(b){return b<25?'±2%':b<30?'-2 to -5%':'-5 to -12%';},
-        cls:  function(b){return b<25?'neu':'neg';}
-    },
-    pfmt:{pot:{none:0,basic:2,moderate:4,intensive:6},cont:{none:0,basic:3,moderate:6,intensive:10},range:{none:'±0%',basic:'+0–3%',moderate:'+2–5%',intensive:'+4–8%'}},
-    exercise:{pot:{sedentary:-3,light:0,moderate:2,active:4},cont:{sedentary:-2,light:0,moderate:2,active:3},range:{sedentary:'-2 to -5%',light:'±0%',moderate:'+1–3%',active:'+2–5%'}},
-    pde5:{pot:{none:0,prn:4,daily:8},range:{none:'±0%',prn:'+3–5%',daily:'+5–10%'}},
-    smoking:{pot:{never:0,former:-2,current:-8},cont:{never:0,former:0,current:-2},range:{never:'±0%',former:'-1 to -3%',current:'-5 to -10%'}},
-    alcohol:{pot:{none:2,moderate:0,heavy:-10},cont:{none:0,moderate:0,heavy:-2},range:{none:'+1–3%',moderate:'±0%',heavy:'-8 to -12%'}},
-    comorbid:{dm:{pot:-8,cont:-3},htn:{pot:-3,cont:-1},cad:{pot:-5,cont:-1}}
-};
-
-// ── HELPERS ────────────────────────────────────────
-var $ = id => document.getElementById(id);
-var clamp = (v,lo,hi) => Math.max(lo,Math.min(hi,v));
-var blend = (a,b,w) => a.map((v,i)=>Math.round(v*(1-w)+b[i]*w));
-
-function getPotData(L,R){
-    var w=Math.max(L,R),b=Math.min(L,R);
-    if(w===1) return POT.BL_G1;
-    if(w===2&&b===1) return POT.UL_G1_CL_G2;
-    if(w===2) return POT.BL_G2;
-    if(w===3&&b===1) return blend(POT.BL_G2,POT.G3_PLUS,0.5);
-    if(w===3&&b===2) return POT.G3_PLUS;
-    return POT.VERY_HIGH;
-}
-function getContData(L,R){
-    var w=Math.max(L,R),b=Math.min(L,R);
-    if(w===1) return CONT.BL_G1;
-    if(w===2&&b===1) return CONT.UL_G1_CL_G2;
-    if(w===2) return CONT.BL_G2;
-    if(w===3&&b===1) return blend(CONT.BL_G2,CONT.G3_PLUS,0.5);
-    if(w===3&&b===2) return CONT.G3_PLUS;
-    return CONT.VERY_HIGH;
-}
-
-// ── NS SELECTOR ────────────────────────────────────
-var nsLabels = {1:'Grade 1 — Intrafascial',2:'Grade 2 — Interfascial',3:'Grade 3 — Wide excision'};
-var nsGClass  = {1:'g1',2:'g2',3:'g3'};
-
-function setNS(side, grade){
-    S['ns'+(side==='left'?'L':'R')] = grade;
-    document.querySelectorAll('#ns_'+side+' .ns-btn').forEach(b=>{
-        b.classList.remove('active');
-        if(parseInt(b.getAttribute('data-grade'))===grade) b.classList.add('active');
-    });
-    var chip = $('chip_'+side);
-    chip.textContent = (side==='left'?'Left: ':'Right: ') + nsLabels[grade];
-    chip.className = 'ns-chip '+nsGClass[grade];
-    var dot = document.createElement('div');
-    dot.className = 'ns-chip-dot';
-    chip.prepend(dot);
-    calc();
-}
-
-// ── SEGMENT GROUPS ─────────────────────────────────
-function setupGroup(id,key){
-    document.querySelectorAll('#'+id+' .seg-btn').forEach(b=>{
-        b.onclick=()=>{
-            document.querySelectorAll('#'+id+' .seg-btn').forEach(x=>x.classList.remove('on'));
-            b.classList.add('on');
-            var v=b.getAttribute('data-v');
-            S[key]=isNaN(v)?v:parseFloat(v);
-            calc();
-        };
-    });
-}
-
-function toggleCom(key){
-    S[key]=!S[key];
-    $('btn_'+key).classList.toggle('on',S[key]);
-    calc();
-}
-
-// ── SLIDERS ────────────────────────────────────────
-function setSlider(key, unit){
-    var el=$('inp_'+key);
-    var val=parseFloat(el.value);
-    S[key]=val;
-    var disp = key==='bmi' ? val.toFixed(1) : val;
-    $('v_'+key).textContent = disp + (unit?' '+unit:'');
-    if(key==='bmi') $('bmi_val').textContent=val.toFixed(1);
-    if(key==='shim') $('shim_warn').classList.toggle('show', val<12);
-    calc();
-}
-
-// ── MAIN CALC ──────────────────────────────────────
-function calc(){
-    var pd=getPotData(S.nsL,S.nsR), cd=getContData(S.nsL,S.nsR);
-
-    // Age adj
-    var aA;
-    if(S.age<=50)aA=1.10;
-    else if(S.age<=55)aA=1.10-(S.age-50)*0.01;
-    else if(S.age<=60)aA=1.05-(S.age-55)*0.01;
-    else if(S.age<=65)aA=1.00-(S.age-60)*0.01;
-    else if(S.age<=70)aA=0.95-(S.age-65)*0.02;
-    else aA=0.85;
-
-    // SHIM adj
-    var sA=S.shim>=21?1.0:S.shim>=17?0.92+(S.shim-17)*0.02:S.shim>=12?0.85+(S.shim-12)*0.014:0.70;
-
-    // IPSS adj
-    var iA=S.ipss<=7?0:S.ipss<=14?-3:S.ipss<=19?-6:-10;
-
-    // Mod factors
-    var pA=0,cA=0;
-    pA+=MF.bmi.pot(S.bmi);   cA+=MF.bmi.cont(S.bmi);
-    pA+=MF.pfmt.pot[S.pfmt]; cA+=MF.pfmt.cont[S.pfmt];
-    pA+=MF.exercise.pot[S.exercise]; cA+=MF.exercise.cont[S.exercise];
-    pA+=MF.pde5.pot[S.pde5];
-    pA+=MF.smoking.pot[S.smoking]; cA+=MF.smoking.cont[S.smoking];
-    pA+=MF.alcohol.pot[S.alcohol]; cA+=MF.alcohol.cont[S.alcohol];
-    if(S.dm){pA+=MF.comorbid.dm.pot;cA+=MF.comorbid.dm.cont;}
-    if(S.htn){pA+=MF.comorbid.htn.pot;cA+=MF.comorbid.htn.cont;}
-    if(S.cad){pA+=MF.comorbid.cad.pot;cA+=MF.comorbid.cad.cont;}
-
-    var pBase=Math.round(pd[4]*aA*sA);
-    var cBase=Math.round(cd[4]*(S.age>=70?0.95:1.0));
-    var pFin=clamp(pBase+pA,15,98);
-    var cFin=clamp(cBase+cA+iA,40,99);
-    var shimOk=S.shim>=12;
-
-    // Hero
-    setNum('pot_hero', shimOk?pFin+'%':'N/A');
-    setNum('cont_hero', cFin+'%');
-
-    // Delta badges
-    setBadge('pot_delta_badge', pA);
-    setBadge('cont_delta_badge', cA+iA);
-
-    // Timeline bars — potency
-    var pts = shimOk ? [
-        clamp(Math.round(pd[0]*aA*sA)+Math.round(pA*0.5),10,90),
-        clamp(Math.round(pd[1]*aA*sA)+Math.round(pA*0.7),15,92),
-        clamp(Math.round(pd[2]*aA*sA)+Math.round(pA*0.9),20,95),
-        pFin,
-        clamp(Math.round(pd[5]*aA*sA)+pA,20,99)
-    ] : [null,null,null,null,null];
-
-    var ids_p=['pt_6w','pt_3m','pt_6m','pt_12m','pt_18m'];
-    var bars_p=document.querySelectorAll('#tl_pot .tl-bar');
-    ids_p.forEach((id,i)=>{
-        $(id).textContent = pts[i]!==null ? pts[i]+'%' : 'N/A';
-        if(bars_p[i]) bars_p[i].style.height = pts[i]!==null ? pts[i]+'%' : '3%';
-    });
-
-    // Timeline bars — continence
-    var cts=[
-        clamp(Math.round(cd[0])+Math.round(cA*0.5),30,85),
-        clamp(Math.round(cd[1])+Math.round(cA*0.7),50,92),
-        clamp(Math.round(cd[2])+Math.round(cA*0.9),70,97),
-        cFin,
-        clamp(Math.round(cd[5])+cA,80,99)
-    ];
-    var ids_c=['ct_6w','ct_3m','ct_6m','ct_12m','ct_18m'];
-    var bars_c=document.querySelectorAll('#tl_cont .tl-bar');
-    ids_c.forEach((id,i)=>{
-        $(id).textContent=cts[i]+'%';
-        if(bars_c[i]) bars_c[i].style.height=cts[i]+'%';
-    });
-
-    // Mod cards
-    setMod('m_bmi', MF.bmi.range(S.bmi), MF.bmi.cls(S.bmi));
-    setMod('m_pfmt', MF.pfmt.range[S.pfmt], S.pfmt==='none'?'neu':'pos');
-    setMod('m_exercise', MF.exercise.range[S.exercise], S.exercise==='sedentary'?'neg':S.exercise==='light'?'neu':'pos');
-    setMod('m_pde5', MF.pde5.range[S.pde5], S.pde5==='none'?'neu':'pos');
-    setMod('m_smoking', MF.smoking.range[S.smoking], S.smoking==='current'?'neg':S.smoking==='former'?'neg':'neu');
-    setMod('m_alcohol', MF.alcohol.range[S.alcohol], S.alcohol==='heavy'?'neg':S.alcohol==='none'?'pos':'neu');
-    var cc=(S.dm?1:0)+(S.htn?1:0)+(S.cad?1:0);
-    setMod('m_comorbid', cc===0?'±0%':'-'+(cc*3)+' to -'+(cc*8)+'%', cc===0?'neu':'neg');
-
-    // Net
-    $('net_pot').textContent  = (pA>=0?'+':'')+pA+'%';
-    $('net_cont').textContent = (cA>=0?'+':'')+cA+'%';
-}
-
-function setNum(id, val){
-    var el=$(id);
-    if(el.textContent!==val){ el.textContent=val; el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
-}
-
-function setBadge(id, adj){
-    var el=$(id);
-    el.textContent = (adj>0?'+':'')+adj+'% lifestyle adj';
-    el.className = 'hero-delta '+(adj>0?'pos':adj<0?'neg':'neu');
-}
-
-function setMod(id,text,cls){
-    var el=$(id);
-    el.textContent=text;
-    el.className='mod-val '+cls;
-}
-
-// ── INIT ───────────────────────────────────────────
-window.onload=function(){
-    ['age','shim','ipss','bmi'].forEach(k=>{
-        var unit=k==='age'?'yrs':'';
-        $('inp_'+k).oninput=()=>setSlider(k,unit);
-    });
-    ['grp_pfmt','grp_exercise','grp_smoking','grp_pde5','grp_alcohol'].forEach(id=>{
-        setupGroup(id, id.replace('grp_',''));
-    });
-    // init chip dots
-    ['left','right'].forEach(side=>{
-        var chip=$('chip_'+side);
-        var dot=document.createElement('div');
-        dot.className='ns-chip-dot';
-        chip.prepend(dot);
-    });
-    calc();
-};
-</script>
-</body>
-</html>
+COMPASS
+
+Functional Outcomes Module
+Post-Radical Prostatectomy Recovery Prediction
+
+Mount Sinai · Tewari Lab
+📄 Methods & References
+NERVE-SPARING GRADE
+LEFT SIDE
+Grade 1
+Intrafascial
+Grade 2
+Interfascial
+Grade 3
+Wide excision
+RIGHT SIDE
+Grade 1
+Intrafascial
+Grade 2
+Interfascial
+Grade 3
+Wide excision
+
+PATIENT FACTORS
+Age ?
+64 yrs
+Baseline SHIM ?
+21
+Baseline IPSS ?
+8
+
+MODIFIABLE FACTORS
+BMI
+27.0
+Pelvic Floor Training (PFMT)
+None
+Basic
+Mod
+Intensive
+Exercise Level
+Sedentary
+Light
+Mod
+Active
+Smoking Status
+Never
+Former
+Current
+PDE5 Inhibitor Plan ?
+None
+PRN
+Daily
+Alcohol Usage
+None
+Moderate
+Heavy
+Comorbidities
+Diabetes
+HTN
+CAD
+Predictions based on outcomes data from Dr. Ash Tewari, M.D.
+Chairman, Department of Urology · Icahn School of Medicine at Mount Sinai
+Prospectively collected RALP outcomes registry · 2023–2026
+n = 1,535 patients
+
+Left: Grade 1 — Intrafascial
+
+Right: Grade 1 — Intrafascial
+⚡ POTENCY RECOVERY — 12 MONTHS
+—
+of patients with similar profile achieve SHIM ≥12
+—
+💧 CONTINENCE RECOVERY — 12 MONTHS
+—
+achieve 0–1 pad usage at 12 months
+—
+
+POTENCY RECOVERY TRAJECTORY
+
+—
+6wk
+
+—
+3mo
+
+—
+6mo
+
+—
+12mo
+
+—
+18mo
+
+CONTINENCE RECOVERY TRAJECTORY
+
+—
+6wk
+
+—
+3mo
+
+—
+6mo
+
+—
+12mo
+
+—
+18mo
+MODIFIABLE FACTOR ADJUSTMENTS
+BMI (27.0)
+—
+Pelvic Floor Training
+—
+Exercise Level
+—
+PDE5 Inhibitors
+—
+Smoking Status
+—
+Alcohol Usage
+—
+Comorbidities
+—
+Net lifestyle adjustment
+
+±0%
+potency
+
+±0%
+continence
+Research use only. Based on 1,535 RALP outcomes from Dr. Ash Tewari's registry, Mount Sinai (2023–2026). Modifiable factor adjustments are literature-calibrated. Does not replace clinical judgment. → Full methods, performance metrics & references
